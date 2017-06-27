@@ -10,6 +10,45 @@ GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 # Phase 1: Simulator #
 ######################
 
+def is_prime(n):
+    """Return True if n is a prime number, False if not
+    >>> is_prime(2)
+    True
+    >>> is_prime(3)
+    True
+    >>> is_prime(6)
+    False
+    >>> is_prime(11)
+    True
+    """
+    assert type(n) == int, 'n must be a integer'
+    assert n > 0, 'n must be positive'
+
+    if n in [1, 2]:
+        return True
+    for i in range(2, int(pow(n, 1 / 2)) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+
+def next_prime(n):
+    """Return the nearest prime number that is greater as n
+    >>> next_prime(3)
+    5
+    >>> next_prime(11)
+    13
+    >>> next_prime(23)
+    29
+    """
+    assert type(n) == int, 'n must be a integer'
+    assert n > 0, 'n must be positive'
+
+    while True:
+        n = n + 1
+        if is_prime(n):
+            return n
+
 
 def roll_dice(num_rolls, dice=six_sided):
     """Simulate rolling the DICE exactly NUM_ROLLS times. Return the sum of
@@ -28,8 +67,9 @@ def roll_dice(num_rolls, dice=six_sided):
             reset_zero = True
     if reset_zero:
         score = 0
+    if is_prime(score):
+        score = next_prime(score)
     return score
-
     # END Question 1
 
 
@@ -45,7 +85,10 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN Question 2
-    "*** REPLACE THIS LINE ***"
+    if num_rolls != 0:
+        return roll_dice(num_rolls, dice)
+    else:
+        return 1 + max([opponent_score // 10, opponent_score % 10])
     # END Question 2
 
 
