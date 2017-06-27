@@ -22,8 +22,9 @@ def is_prime(n):
     True
     """
     assert type(n) == int, 'n must be a integer'
-    assert n > 0, 'n must be positive'
-
+    assert n >= 0, 'n must be non-negative'
+    if n == 0:
+        return False
     if n in [1, 2]:
         return True
     for i in range(2, int(pow(n, 1 / 2)) + 1):
@@ -66,9 +67,7 @@ def roll_dice(num_rolls, dice=six_sided):
         else:
             reset_zero = True
     if reset_zero:
-        score = 0
-    if is_prime(score):
-        score = next_prime(score)
+        score = 0  
     return score
     # END Question 1
 
@@ -86,9 +85,12 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN Question 2
     if num_rolls != 0:
-        return roll_dice(num_rolls, dice)
+        score = roll_dice(num_rolls, dice)
     else:
-        return 1 + max([opponent_score // 10, opponent_score % 10])
+        score = 1 + max([opponent_score // 10, opponent_score % 10])
+    if is_prime(score):
+        score = next_prime(score)
+    return score
     # END Question 2
 
 
@@ -111,7 +113,7 @@ def is_swap(score0, score1):
     """
     # BEGIN Question 4
     def smaller_100(x):
-        assert type(x) == int and x > 0, 'x must be positive integer'
+        assert type(x) == int and x >= 0, 'x must be non-negaitive integer'
         if x >= 100:
             return x - 100
         else:
@@ -151,9 +153,20 @@ def play(strategy0, strategy1, score0=0, score1=0, goal=GOAL_SCORE):
     """
     who = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN Question 5
-    "*** REPLACE THIS LINE ***"
+    scores = [score0, score1]
+    strategies = [strategy0, strategy1]
+    while scores[0] < goal and scores[1] < goal:
+        dice = select_dice(*scores)  # Hog Wild
+        num_rolls = strategies[who](scores[who], scores[other(who)])
+        outcome = take_turn(num_rolls, scores[other(who)], dice)
+        if outcome == 0:  # Piggy Back
+            scores[other(who)] += num_rolls
+        scores[who] += outcome
+        if is_swap(*scores):  # Swine Swap
+            scores = scores[::-1]
+        who = other(who)
+    return scores[0], scores[1]
     # END Question 5
-    return score0, score1
 
 
 #######################
