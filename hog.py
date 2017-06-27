@@ -110,7 +110,18 @@ def is_swap(score0, score1):
     versions of each other, such as 19 and 91.
     """
     # BEGIN Question 4
-    "*** REPLACE THIS LINE ***"
+    def smaller_100(x):
+        assert type(x) == int and x > 0, 'x must be positive integer'
+        if x >= 100:
+            return x - 100
+        else:
+            return x
+
+    ls = list(map(smaller_100, [score0, score1]))
+    if ls[0] // 10 == ls[1] % 10 and ls[0] % 10 == ls[1] // 10:
+        return True
+    else:
+        return False
     # END Question 4
 
 
