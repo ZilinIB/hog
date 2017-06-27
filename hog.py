@@ -23,9 +23,9 @@ def is_prime(n):
     """
     assert type(n) == int, 'n must be a integer'
     assert n >= 0, 'n must be non-negative'
-    if n == 0:
+    if n in [0, 1]:
         return False
-    if n in [1, 2]:
+    if n == 2:
         return True
     for i in range(2, int(pow(n, 1 / 2)) + 1):
         if n % i == 0:
@@ -67,7 +67,7 @@ def roll_dice(num_rolls, dice=six_sided):
         else:
             reset_zero = True
     if reset_zero:
-        score = 0  
+        score = 0
     return score
     # END Question 1
 
