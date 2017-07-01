@@ -294,9 +294,7 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
     and rolls NUM_ROLLS otherwise.
     """
     # BEGIN Question 8
-    increment = 1 + max([opponent_score // 10, opponent_score % 10])
-    if (is_prime(increment)):
-        increment = next_prime(increment)
+    increment = take_turn(0, opponent_score)
     if (increment >= margin):
         return 0
     else:
@@ -309,8 +307,11 @@ def swap_strategy(score, opponent_score, num_rolls=5):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN Question 9
-    "*** REPLACE THIS LINE ***"
-    return 5  # Replace this statement
+    increment = take_turn(0, opponent_score)
+    score = score + increment
+    if is_swap(score, opponent_score) and score < opponent_score:
+        return 0
+    return num_rolls  # Replace this statement
     # END Question 9
 
 
