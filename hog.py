@@ -216,7 +216,13 @@ def make_averaged(fn, num_samples=1000):
     not apply.
     """
     # BEGIN Question 6
-    "*** REPLACE THIS LINE ***"
+    def repeat(*args):
+        sum = 0
+        for i in range(num_samples):
+            sum += fn(*args)
+        return sum / num_samples
+
+    return repeat
     # END Question 6
 
 
