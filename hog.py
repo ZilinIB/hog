@@ -1,6 +1,6 @@
 """The Game of Hog."""
 
-from dice import four_sided, six_sided, make_test_dice
+from dice import four_sided, six_sided  # , make_test_dice
 from ucb import main, trace, log_current_line, interact
 
 GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
@@ -195,7 +195,7 @@ def always_roll(n):
 
 # Experiments
 
-def make_averaged(fn, num_samples=1000):
+def make_averaged(fn, num_samples=10000):
     """Return a function that returns the average_value of FN when called.
 
     To implement this function, you will have to use *args syntax, a new Python
@@ -226,7 +226,7 @@ def make_averaged(fn, num_samples=1000):
     # END Question 6
 
 
-def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
+def max_scoring_num_rolls(dice=six_sided, num_samples=10000):
     """Return the number of dice (1 to 10) that gives the highest average turn
     score by calling roll_dice with the provided DICE over NUM_SAMPLES times.
     Assume that dice always return positive outcomes.
@@ -278,18 +278,19 @@ def run_experiments():
     if True:  # Change to True to test always_roll(8)
         print('always_roll(8) win rate:', average_win_rate(always_roll(8)))
 
-    if False:  # Change to True to test bacon_strategy
+    if True:  # Change to True to test bacon_strategy
         print('bacon_strategy win rate:', average_win_rate(bacon_strategy))
 
-    if False:  # Change to True to test swap_strategy
+    if True:  # Change to True to test swap_strategy
         print('swap_strategy win rate:', average_win_rate(swap_strategy))
 
-    "*** You may add additional experiments as you wish ***"
+    if True:  # Change to True to test final_strategy
+        print('final_strategy win rate', average_win_rate(final_strategy))
 
 
 # Strategies
 
-def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
+def bacon_strategy(score, opponent_score, margin=8, num_rolls=6):
     """This strategy rolls 0 dice if that gives at least MARGIN points,
     and rolls NUM_ROLLS otherwise.
     """
@@ -302,7 +303,7 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
     # END Question 8
 
 
-def swap_strategy(score, opponent_score, num_rolls=5):
+def swap_strategy(score, opponent_score, num_rolls=6):
     """This strategy rolls 0 dice when it results in a beneficial swap and
     rolls NUM_ROLLS otherwise.
     """
@@ -318,11 +319,33 @@ def swap_strategy(score, opponent_score, num_rolls=5):
 def final_strategy(score, opponent_score):
     """Write a brief description of your final strategy.
 
-    *** YOUR DESCRIPTION HERE ***
+    Roll 0 dice when it results in a beneficial swap or the bacon is greater
+    than margin, roll num_rolls otherwise.
     """
     # BEGIN Question 10
-    "*** REPLACE THIS LINE ***"
-    return 5  # Replace this statement
+    if (score - opponent_score) > 80:
+        return 0
+
+    num_rolls_six, num_rolls_four = 6, 3
+    margin_six, margin_four = 8, 4
+    dice = select_dice(score, opponent_score)
+    if(dice == six_sided):
+        num_rolls = num_rolls_six
+        margin = margin_six
+        for i in range(5, 11):
+            if (is_swap(score, opponent_score + i) and score <= opponent_score):
+                return i
+    elif(dice == four_sided):
+        num_rolls = num_rolls_four
+        margin = margin_four
+        for i in range(3, 11):
+            if (is_swap(score, opponent_score + i) and score <= opponent_score):
+                return i
+    increment = take_turn(0, opponent_score)
+    score = score + increment
+    if((is_swap(score, opponent_score) and score < opponent_score) or increment >= margin or score >= 100):
+        return 0
+    return num_rolls  # Replace this statement
     # END Question 10
 
 
