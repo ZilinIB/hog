@@ -275,7 +275,7 @@ def run_experiments():
         four_sided_max = max_scoring_num_rolls(four_sided)
         print('Max scoring num rolls for four-sided dice:', four_sided_max)
 
-    if False:  # Change to True to test always_roll(8)
+    if True:  # Change to True to test always_roll(8)
         print('always_roll(8) win rate:', average_win_rate(always_roll(8)))
 
     if False:  # Change to True to test bacon_strategy
@@ -294,8 +294,13 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=5):
     and rolls NUM_ROLLS otherwise.
     """
     # BEGIN Question 8
-    "*** REPLACE THIS LINE ***"
-    return 5  # Replace this statement
+    increment = 1 + max([opponent_score // 10, opponent_score % 10])
+    if (is_prime(increment)):
+        increment = next_prime(increment)
+    if (increment >= margin):
+        return 0
+    else:
+        return num_rolls
     # END Question 8
 
 
