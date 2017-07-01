@@ -236,7 +236,15 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     10
     """
     # BEGIN Question 7
-    "*** REPLACE THIS LINE ***"
+    best_num = 0
+    highest_score = -1
+    for num_rolls in range(1, 11):
+        score = make_averaged(roll_dice, num_samples)(num_rolls, dice)
+        if score > highest_score:
+            highest_score = score
+            best_num = num_rolls
+    return best_num
+
     # END Question 7
 
 
